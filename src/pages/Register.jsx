@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, User, Phone, MapPin, Eye, EyeOff, AlertCircle, Check, Shield } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Register = () => {
       setError('Please select whether you want to hire services or offer services before signing up with Google');
       return;
     }
-    window.location.href = `http://localhost:5000/api/auth/google?role=${formData.role}`;
+    window.location.href = `${API_URL}/api/auth/google?role=${formData.role}`;
   };
 
   // Handle Google OAuth callback
@@ -39,7 +40,7 @@ const Register = () => {
       // Store the token
       localStorage.setItem('token', token);
       // Fetch user data to update AuthContext
-      fetch('http://localhost:5000/api/auth/me', {
+      fetch(`${API_URL}/api/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -61,7 +62,7 @@ const Register = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/categories');
+        const response = await axios.get(`${API_URL}/api/categories`);
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);

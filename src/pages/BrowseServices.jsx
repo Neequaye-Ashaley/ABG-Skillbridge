@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Filter, MapPin, Star, Shield, Clock, SlidersHorizontal, ChevronDown, ArrowRight, Briefcase, Users, TrendingUp } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const BrowseServices = () => {
   const [searchParams] = useSearchParams();
@@ -33,10 +34,10 @@ const BrowseServices = () => {
     const fetchData = async () => {
       try {
         const [artisansResponse, categoriesResponse] = await Promise.all([
-          axios.get('http://localhost:5000/api/users/artisans', {
+          axios.get(`${API_URL}/api/users/artisans`, {
             params: searchTerm ? { search: searchTerm } : {}
           }),
-          axios.get('http://localhost:5000/api/categories')
+          axios.get(`${API_URL}/api/categories`)
         ]);
         setArtisans(artisansResponse.data);
         setCategories(categoriesResponse.data);
@@ -384,7 +385,7 @@ const BrowseServices = () => {
                       <img
                         src={artisan.artisan_profile.profile_image.startsWith('http')
                           ? artisan.artisan_profile.profile_image
-                          : `http://localhost:5000${artisan.artisan_profile.profile_image}`}
+                          : `${API_URL}${artisan.artisan_profile.profile_image}`}
                         alt={artisan.name}
                         className="w-16 h-16 rounded-2xl object-cover flex-shrink-0"
                       />

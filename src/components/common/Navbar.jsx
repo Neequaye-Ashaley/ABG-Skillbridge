@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Search, User, LogIn, LogOut, Bell, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +22,7 @@ const Navbar = () => {
 
   const fetchUnreadCount = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/notifications/unread', {
+      const response = await axios.get(`${API_URL}/api/notifications/unread`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setUnreadCount(response.data.length);
@@ -162,7 +163,7 @@ const Navbar = () => {
                 >
                   {user?.role === 'artisan' && user?.artisan_profile?.profile_image ? (
                     <img
-                      src={`http://localhost:5000${user.artisan_profile.profile_image}`}
+                      src={user.artisan_profile.profile_image.startsWith('http') ? user.artisan_profile.profile_image : `${API_URL}${user.artisan_profile.profile_image}`}
                       alt={user?.name}
                       className="w-8 h-8 rounded-full object-cover border-2 border-blue-200"
                     />
@@ -336,7 +337,7 @@ const Navbar = () => {
                 <div className="flex items-center space-x-3 px-4 py-3 bg-gray-50 rounded-lg">
                   {user?.role === 'artisan' && user?.artisan_profile?.profile_image ? (
                     <img
-                      src={`http://localhost:5000${user.artisan_profile.profile_image}`}
+                      src={user.artisan_profile.profile_image.startsWith('http') ? user.artisan_profile.profile_image : `${API_URL}${user.artisan_profile.profile_image}`}
                       alt={user?.name}
                       className="w-10 h-10 rounded-full object-cover border-2 border-blue-200"
                     />

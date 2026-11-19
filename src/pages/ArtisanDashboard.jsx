@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Briefcase, Star, Users, TrendingUp, Calendar, Clock, DollarSign, MessageSquare, ToggleRight, ToggleLeft, Home, Search, Settings, User, ArrowRight, X, Menu, Plus, CheckCircle, AlertCircle, Activity, Circle, ChevronRight, MapPin, Filter, MoreVertical } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 const ArtisanDashboard = () => {
   const { user } = useAuth();
@@ -26,7 +27,7 @@ const ArtisanDashboard = () => {
     const fetchDashboardData = async () => {
       try {
         // Fetch artisan's jobs
-        const jobsResponse = await axios.get('http://localhost:5000/api/jobs', {
+        const jobsResponse = await axios.get(`${API_URL}/api/jobs`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
 
@@ -59,7 +60,7 @@ const ArtisanDashboard = () => {
   const handleAvailabilityToggle = async () => {
     try {
       await axios.put(
-        `http://localhost:5000/api/users/${user._id}/availability`,
+        `${API_URL}/api/users/${user._id}/availability`,
         { is_available: !isAvailable },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );

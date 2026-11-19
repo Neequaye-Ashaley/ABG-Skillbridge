@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, X, Plus, Trash2, ToggleRight, ToggleLeft, Upload, Image as ImageIcon, Check, AlertCircle, Sparkles, Briefcase, Award, DollarSign, Clock } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 const EditArtisanProfile = () => {
   const navigate = useNavigate();
@@ -36,11 +37,11 @@ const EditArtisanProfile = () => {
     const fetchData = async () => {
       try {
         // Fetch categories
-        const categoriesResponse = await axios.get('http://localhost:5000/api/categories');
+        const categoriesResponse = await axios.get(`${API_URL}/api/categories`);
         setCategories(categoriesResponse.data);
 
         // Fetch artisan profile
-        const profileResponse = await axios.get(`http://localhost:5000/api/users/${user._id}`, {
+        const profileResponse = await axios.get(`${API_URL}/api/users/${user._id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
 
@@ -143,8 +144,8 @@ const EditArtisanProfile = () => {
     setUploading(true);
     try {
       const endpoint = imageType === 'profile'
-        ? `http://localhost:5000/api/users/${user._id}/upload/profile`
-        : `http://localhost:5000/api/users/${user._id}/upload/background`;
+        ? `${API_URL}/api/users/${user._id}/upload/profile`
+        : `${API_URL}/api/users/${user._id}/upload/background`;
 
       const response = await axios.post(endpoint, formData, {
         headers: {
@@ -178,14 +179,14 @@ const EditArtisanProfile = () => {
     try {
       // Update artisan profile
       await axios.put(
-        `http://localhost:5000/api/users/${user._id}/artisan-profile`,
+        `${API_URL}/api/users/${user._id}/artisan-profile`,
         formData,
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
 
       // Update user phone number
       await axios.put(
-        `http://localhost:5000/api/users/${user._id}`,
+        `${API_URL}/api/users/${user._id}`,
         { phone: formData.phone },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
@@ -261,7 +262,7 @@ const EditArtisanProfile = () => {
                   {profileImagePreview ? (
                     <div className="relative">
                       <img
-                        src={profileImagePreview.startsWith('http') ? profileImagePreview : `http://localhost:5000${profileImagePreview}`}
+                        src={profileImagePreview.startsWith('http') ? profileImagePreview : `${API_URL}${profileImagePreview}`}
                         alt="Profile preview"
                         className="w-full h-48 object-cover rounded-xl"
                       />
@@ -311,7 +312,7 @@ const EditArtisanProfile = () => {
                   {backgroundImagePreview ? (
                     <div className="relative">
                       <img
-                        src={backgroundImagePreview.startsWith('http') ? backgroundImagePreview : `http://localhost:5000${backgroundImagePreview}`}
+                        src={backgroundImagePreview.startsWith('http') ? backgroundImagePreview : `${API_URL}${backgroundImagePreview}`}
                         alt="Background preview"
                         className="w-full h-48 object-cover rounded-xl"
                       />

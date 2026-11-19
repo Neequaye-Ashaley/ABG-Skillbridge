@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Briefcase, Calendar, Clock, Star, Plus, MessageSquare, Heart, CheckCircle, AlertCircle, Home, Search, Settings, User, ArrowRight, X, Menu, TrendingUp, Users, FileText, Activity, Circle, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 const CustomerDashboard = () => {
   const { user } = useAuth();
@@ -22,7 +23,7 @@ const CustomerDashboard = () => {
     const fetchDashboardData = async () => {
       try {
         // Fetch customer's bookings
-        const bookingsResponse = await axios.get('http://localhost:5000/api/jobs', {
+        const bookingsResponse = await axios.get(`${API_URL}/api/jobs`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
 
@@ -43,7 +44,7 @@ const CustomerDashboard = () => {
         });
 
         // Fetch categories for popular services
-        const categoriesResponse = await axios.get('http://localhost:5000/api/categories');
+        const categoriesResponse = await axios.get(`${API_URL}/api/categories`);
         setCategories(categoriesResponse.data.slice(0, 6));
       } catch (error) {
         console.error('Error fetching dashboard data:', error);

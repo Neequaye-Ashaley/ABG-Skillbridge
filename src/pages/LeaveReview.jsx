@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, ArrowLeft, Save } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const LeaveReview = () => {
   const { jobId } = useParams();
@@ -11,7 +12,7 @@ const LeaveReview = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [hoverRating, setHoverRating] = useState(0);
@@ -19,7 +20,7 @@ const LeaveReview = () => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/jobs/${jobId}`, {
+        const response = await axios.get(`${API_URL}/api/jobs/${jobId}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         setJob(response.data);
@@ -41,7 +42,7 @@ const LeaveReview = () => {
     setSubmitting(true);
 
     try {
-      await axios.post('http://localhost:5000/api/reviews', {
+      await axios.post(`${API_URL}/api/reviews`, {
         jobId,
         rating,
         comment
@@ -136,11 +137,10 @@ const LeaveReview = () => {
                   className="focus:outline-none"
                 >
                   <Star
-                    className={`w-8 h-8 ${
-                      star <= (hoverRating || rating)
-                        ? 'text-yellow-500 fill-current'
-                        : 'text-gray-300'
-                    }`}
+                    className={`w-8 h-8 ${star <= (hoverRating || rating)
+                      ? 'text-yellow-500 fill-current'
+                      : 'text-gray-300'
+                      }`}
                     size={32}
                   />
                 </button>

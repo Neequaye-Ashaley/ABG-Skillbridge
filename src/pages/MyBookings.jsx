@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Plus, Calendar, MapPin, DollarSign, Clock, AlertCircle, Briefcase, CheckCircle, Star, ArrowRight, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 const MyBookings = () => {
   const location = useLocation();
@@ -15,7 +16,7 @@ const MyBookings = () => {
 
   const fetchBookings = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/jobs', {
+      const response = await axios.get(`${API_URL}/api/jobs`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setBookings(response.data);
@@ -23,7 +24,7 @@ const MyBookings = () => {
       // Check which completed jobs have reviews
       const completedJobs = response.data.filter(b => b.status === 'completed');
       const reviewChecks = completedJobs.map(job =>
-        axios.get(`http://localhost:5000/api/reviews/job/${job._id}`, {
+        axios.get(`${API_URL}/api/reviews/job/${job._id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         }).then(res => ({ jobId: job._id, hasReview: !!res.data }))
           .catch(() => ({ jobId: job._id, hasReview: false }))

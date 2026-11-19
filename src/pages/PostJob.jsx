@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, X, MapPin, Calendar, DollarSign } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 const PostJob = () => {
   const { artisanId } = useParams();
@@ -14,7 +15,7 @@ const PostJob = () => {
   const [success, setSuccess] = useState('');
   const [artisan, setArtisan] = useState(null);
   const [categories, setCategories] = useState([]);
-  
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -28,8 +29,8 @@ const PostJob = () => {
     const fetchData = async () => {
       try {
         const [artisanResponse, categoriesResponse] = await Promise.all([
-          axios.get(`http://localhost:5000/api/users/${artisanId}`),
-          axios.get('http://localhost:5000/api/categories')
+          axios.get(`${API_URL}/api/users/${artisanId}`),
+          axios.get(`${API_URL}/api/categories`)
         ]);
         setArtisan(artisanResponse.data);
         setCategories(categoriesResponse.data);
@@ -66,7 +67,7 @@ const PostJob = () => {
         job_address: formData.location_address,
       };
 
-      await axios.post('http://localhost:5000/api/jobs', jobData, {
+      await axios.post(`${API_URL}/api/jobs`, jobData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
 
@@ -123,7 +124,7 @@ const PostJob = () => {
           {/* Job Details */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Job Details</h2>
-            
+
             <div className="space-y-4">
               <div>
                 <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
@@ -180,7 +181,7 @@ const PostJob = () => {
           {/* Budget & Schedule */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Budget & Schedule</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
@@ -222,7 +223,7 @@ const PostJob = () => {
           {/* Location */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Job Location</h2>
-            
+
             <div>
               <label htmlFor="location_address" className="block text-sm font-medium text-gray-700 mb-2">
                 Address *

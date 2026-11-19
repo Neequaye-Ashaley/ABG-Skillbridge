@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Calendar, DollarSign, Clock, Check, X, AlertCircle } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 import { motion } from 'framer-motion';
 
 const JobDetails = () => {
@@ -17,7 +18,7 @@ const JobDetails = () => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/jobs/${id}`, {
+        const response = await axios.get(`${API_URL}/api/jobs/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         console.log('Job data:', response.data);
@@ -35,7 +36,7 @@ const JobDetails = () => {
   const handleAccept = async () => {
     setActionLoading(true);
     try {
-      await axios.put(`http://localhost:5000/api/jobs/${id}/accept`, {}, {
+      await axios.put(`${API_URL}/api/jobs/${id}/accept`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setJob({ ...job, status: 'accepted', artisan_id: user._id });
@@ -52,7 +53,7 @@ const JobDetails = () => {
   const handleDecline = async () => {
     setActionLoading(true);
     try {
-      await axios.put(`http://localhost:5000/api/jobs/${id}/decline`, {}, {
+      await axios.put(`${API_URL}/api/jobs/${id}/decline`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setJob({ ...job, status: 'declined' });
@@ -69,7 +70,7 @@ const JobDetails = () => {
   const handleComplete = async () => {
     setActionLoading(true);
     try {
-      await axios.put(`http://localhost:5000/api/jobs/${id}/complete`, {}, {
+      await axios.put(`${API_URL}/api/jobs/${id}/complete`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setJob({ ...job, status: 'completed' });
@@ -86,7 +87,7 @@ const JobDetails = () => {
   const handleStart = async () => {
     setActionLoading(true);
     try {
-      await axios.put(`http://localhost:5000/api/jobs/${id}/start`, {}, {
+      await axios.put(`${API_URL}/api/jobs/${id}/start`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setJob({ ...job, status: 'in_progress' });
@@ -251,7 +252,7 @@ const JobDetails = () => {
               <div className="flex items-center">
                 {job?.artisan_id?.artisan_profile?.profile_image ? (
                   <img
-                    src={`http://localhost:5000${job.artisan_id.artisan_profile.profile_image}`}
+                    src={job.artisan_id.artisan_profile.profile_image.startsWith('http') ? job.artisan_id.artisan_profile.profile_image : `${API_URL}${job.artisan_profile ? job.artisan_profile.profile_image : job.artisan_id.artisan_profile.profile_image}`}
                     alt={job?.artisan_id?.name}
                     className="w-14 h-14 rounded-full object-cover mr-4 border-2 border-blue-200"
                   />

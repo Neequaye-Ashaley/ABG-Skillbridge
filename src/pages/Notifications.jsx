@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Bell, Check, CheckCheck, Trash2, Briefcase, AlertCircle, Clock, ArrowRight, Sparkles } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 const Notifications = () => {
   const navigate = useNavigate();
@@ -14,13 +15,13 @@ const Notifications = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/notifications', {
+        const response = await axios.get(`${API_URL}/api/notifications`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         setNotifications(response.data);
 
         // Mark all as read when opening notifications page
-        await axios.put('http://localhost:5000/api/notifications/read-all', {}, {
+        await axios.put(`${API_URL}/api/notifications/read-all`, {}, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
 
@@ -40,7 +41,7 @@ const Notifications = () => {
 
   const handleMarkAsRead = async (notificationId) => {
     try {
-      await axios.put(`http://localhost:5000/api/notifications/${notificationId}/read`, {}, {
+      await axios.put(`${API_URL}/api/notifications/${notificationId}/read`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setNotifications(notifications.map(n =>
@@ -54,7 +55,7 @@ const Notifications = () => {
 
   const handleMarkAllAsRead = async () => {
     try {
-      await axios.put('http://localhost:5000/api/notifications/read-all', {}, {
+      await axios.put(`${API_URL}/api/notifications/read-all`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setNotifications(notifications.map(n => ({ ...n, is_read: true })));
@@ -66,7 +67,7 @@ const Notifications = () => {
 
   const handleDelete = async (notificationId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/notifications/${notificationId}`, {
+      await axios.delete(`${API_URL}/api/notifications/${notificationId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setNotifications(notifications.filter(n => n._id !== notificationId));

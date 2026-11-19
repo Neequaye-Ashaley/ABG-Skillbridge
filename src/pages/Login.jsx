@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, AlertCircle, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Login = () => {
       // Store the token
       localStorage.setItem('token', token);
       // Fetch user data to update AuthContext
-      fetch('http://localhost:5000/api/auth/me', {
+      fetch(`${API_URL}/api/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -182,7 +183,7 @@ const Login = () => {
 
               <div className="mt-6">
                 <button
-                  onClick={() => window.location.href = 'http://localhost:5000/api/auth/google'}
+                  onClick={() => window.location.href = `${API_URL}/api/auth/google`}
                   className="w-full inline-flex items-center justify-center gap-3 py-3 px-4 border border-gray-200 rounded-2xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 hover:shadow-lg hover:-translate-y-0.5 hover:scale-105 transition-all duration-300"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">

@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Star, AlertCircle, MapPin, Calendar, Wrench, MoreVertical, ChevronRight, Sparkles } from 'lucide-react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const Reviews = () => {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ const Reviews = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/reviews/artisan/${user._id}`);
+        const response = await axios.get(`${API_URL}/api/reviews/artisan/${user._id}`);
         setReviews(response.data);
       } catch (error) {
         console.error('Error fetching reviews:', error);

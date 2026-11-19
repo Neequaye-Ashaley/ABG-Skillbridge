@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { MapPin, Star, Phone, Mail, Clock, Shield, Calendar, Award, MessageCircle, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 const ArtisanProfile = () => {
   const { id } = useParams();
@@ -17,8 +18,8 @@ const ArtisanProfile = () => {
     const fetchArtisanData = async () => {
       try {
         const [artisanResponse, reviewsResponse] = await Promise.all([
-          axios.get(`http://localhost:5000/api/users/${id}`),
-          axios.get(`http://localhost:5000/api/reviews/artisan/${id}`)
+          axios.get(`${API_URL}/api/users/${id}`),
+          axios.get(`${API_URL}/api/reviews/artisan/${id}`)
         ]);
         setArtisan(artisanResponse.data);
         setReviews(reviewsResponse.data);
@@ -87,7 +88,7 @@ const ArtisanProfile = () => {
               <div className="relative">
                 {artisan.artisan_profile?.profile_image ? (
                   <img
-                    src={`http://localhost:5000${artisan.artisan_profile.profile_image}`}
+                    src={artisan.artisan_profile.profile_image.startsWith('http') ? artisan.artisan_profile.profile_image : `${API_URL}${artisan.artisan_profile.profile_image}`}
                     alt={artisan.name}
                     className="w-48 h-48 lg:w-56 lg:h-56 rounded-[24px] object-cover shadow-2xl border-4 border-blue-200"
                   />

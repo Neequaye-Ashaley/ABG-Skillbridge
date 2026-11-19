@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Star, Shield, Clock, ArrowRight, Briefcase, TrendingUp, DollarSign, ChevronDown, Zap, Award, CheckCircle, Send, MessageSquare } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 import { motion, useInView } from 'framer-motion';
 
 const Home = () => {
@@ -58,7 +59,7 @@ const Home = () => {
     if (value.trim().length >= 2) {
       const timeout = setTimeout(async () => {
         try {
-          const response = await axios.get('http://localhost:5000/api/users/artisans', {
+          const response = await axios.get(`${API_URL}/api/users/artisans`, {
             params: { search: value }
           });
           setSuggestions(response.data.slice(0, 5));
@@ -85,8 +86,8 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const [artisansResponse, categoriesResponse] = await Promise.all([
-          axios.get('http://localhost:5000/api/users/artisans'),
-          axios.get('http://localhost:5000/api/categories')
+          axios.get(`${API_URL}/api/users/artisans`),
+          axios.get(`${API_URL}/api/categories`)
         ]);
         setArtisans(artisansResponse.data);
         setCategories(categoriesResponse.data);
@@ -105,7 +106,7 @@ const Home = () => {
     if (isAuthenticated && user?.role === 'artisan') {
       const fetchArtisanStats = async () => {
         try {
-          const jobsResponse = await axios.get('http://localhost:5000/api/jobs', {
+          const jobsResponse = await axios.get(`${API_URL}/api/jobs`, {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
           });
 
@@ -729,7 +730,7 @@ const Home = () => {
                       {/* Background Image */}
                       {backgroundImage ? (
                         <motion.img
-                          src={backgroundImage.startsWith('http') ? backgroundImage : `http://localhost:5000${backgroundImage}`}
+                          src={backgroundImage.startsWith('http') ? backgroundImage : `${API_URL}${backgroundImage}`}
                           alt={artisan.name}
                           className="absolute inset-0 w-full h-full object-cover"
                           initial={{ scale: 1.2 }}
@@ -755,7 +756,7 @@ const Home = () => {
                         >
                           {profileImage ? (
                             <motion.img
-                              src={profileImage.startsWith('http') ? profileImage : `http://localhost:5000${profileImage}`}
+                              src={profileImage.startsWith('http') ? profileImage : `${API_URL}${profileImage}`}
                               alt={artisan.name}
                               className="w-14 h-14 rounded-full object-cover border-2 border-white/30"
                               whileHover={{ scale: 1.2, rotate: 360 }}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Calendar, MapPin, DollarSign, Clock, AlertCircle, Check, X, ChevronRight, MoreVertical, Hammer, Zap, Palette, Scissors, Sparkles, Leaf, Wrench, User, Mail, Briefcase } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const MyJobs = () => {
   const location = useLocation();
@@ -13,7 +14,7 @@ const MyJobs = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/jobs', {
+      const response = await axios.get(`${API_URL}/api/jobs`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setJobs(response.data);
